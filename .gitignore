@@ -1,0 +1,12 @@
+Makefile
+Makefile.in
+autom4te.cache
+bin/.deps/
+bin/Makefile
+bin/Makefile.in
+bin/MongoBlog
+bin/MongoBlog.o
+config.log
+config.status
+configure
+src/.deps/
