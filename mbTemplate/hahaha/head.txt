@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type" />
+  <title>[TITLE]</title>
+  <style type="text/css">
+.main {
+  background-color: #cccccc;
+  height: 100%;
+  width: 80%;
+  margin-left: 10%;
+}
+body {
+  background-color: #999999;
+  height: 100%;
+}
+.page_header {
+  background-color: #666666;
+  color: #dcdcdc;
+  font-family: "Times New Roman",Times,serif;
+  text-align: center;
+  font-weight: bold;
+  font-size: 32pt;
+  margin-left: 10%;
+  width: 80%;
+  margin-top: 0px;
+}
+.post {
+  border-style: solid;
+  border-width: 3pt;
+  width: 90%;
+  margin-left: 5%;
+  background-color: #afafaf;
+  margin-top: 1.5%;
+  margin-bottom: 1.5%;
+}
+.posttitle {
+  font-family: "Courier New",Courier,monospace;
+  text-align: center;
+  font-size: 18pt;
+  line-height: 30px;
+  font-weight: bold;
+  background-color: #b8b8b8;
+}
+.postbody {
+  font-family: Arial,Helvetica,sans-serif;
+  font-size: 16px;
+  text-align: left;
+  margin-left: 4%;
+  margin-right: 4%;
+}
+
+  </style>
+</head>
+<body>
+<div class="page_header">[TITLE]</div>
+<div class="main">
+

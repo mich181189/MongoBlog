@@ -1,0 +1,5 @@
+<div class="post">
+<div class="posttitle">[POSTTITLE]</div>
+<div class="postbody">[POSTBODY]</div>
+</div>
+

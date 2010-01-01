@@ -95,6 +95,7 @@ void Template::render_post(string title,string body) {
     string output = post;
     output = substitute(output,"[POSTTITLE]",title);
     output = substitute(output,"[POSTBODY]",body);
+    cout << output;
 }
 
 void Template::render_footer() {

@@ -26,6 +26,8 @@ int main() {
     Template templ("hahaha");
     templ.set_page_title("MongoBlog");
     templ.render_head();
+    templ.render_post("title","body");
+    templ.render_post("title","body");
     templ.render_footer();
     return 0;
 }
