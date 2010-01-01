@@ -1,2 +1,4 @@
-bin_PROGRAMS = ../bin/MongoBlog
-MongoBlog_SOURCES = MongoBlog.cpp
+bin_PROGRAMS = MongoBlog
+MongoBlog_SOURCES = ../src/MongoBlog.cpp
+AM_CXXFLAGS = -I../include
+MongoBlog_LDADD = ../libs/Template/libTemplate.la

@@ -1,1 +1,1 @@
-SUBDIRS = cgi_handler
+SUBDIRS = Template
