@@ -29,5 +29,9 @@ private:
     string substitute(string input,string needle,string replacement);
     //do all standard replacements
     string substitute(string input);
+    //Date functions now
+    string dayofweek(int num);
+    string num_suffix(int num);
+    string monthname(int num);
 };
 #endif

@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <cstdlib> //for getenv()
+#include <cstdlib>
 #include <cgicc/Cgicc.h>
 #include <cgicc/HTTPHTMLHeader.h>
 #include <cgicc/HTTPRedirectHeader.h>
