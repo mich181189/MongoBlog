@@ -28,9 +28,9 @@ StorageEngine::StorageEngine(string username,string pass) {
 }
 
 //connects to name
-StorageEngine::StorageEngine(string host,string username,string pass) {
+StorageEngine::StorageEngine(string host,string db,string username,string pass) {
     hostname = host;
-    database = "MongoBlog";
+    database = db;
     collection = "posts";
     connect(username, pass);
 }

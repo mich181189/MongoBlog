@@ -10,8 +10,12 @@
 
 #include "Blog.hpp"
 #include <vector>
-
+#include <iostream>
+#include <sstream>
 using std::string;
+using std::fstream;
+using std::ios_base;
+using std::stringstream;
 using std::vector;
 using std::cout;
 using std::endl;
@@ -23,12 +27,7 @@ Blog::Blog() {
     pagetitle = "MongoBlog";
     dbserver = "";
     dbauth = false;
-    
-    //for testing only!
-    dbuser = "blogtest";
-    dbpassword="bt";
-    dbauth = true;
-    //end testing
+    database = "MongoBlog";
     
     init();
 }
@@ -42,6 +41,37 @@ Blog::~Blog() {
 
 //constructor that uses a config file
 Blog::Blog(std::string config) {
+    fstream file;
+    string line;
+    file.open(config.c_str(),ios_base::in);
+    while(file >> line) {
+        int pos = line.find(':',0);
+        string name = line.substr(0,pos);
+        string val = line.substr(pos+1);
+        if(!name.compare("hostname"))
+        {
+            dbserver = val;
+        }
+        else if(!name.compare("database"))
+        {
+            database = val;
+        }
+        else if(!name.compare("uname"))
+        {
+            dbuser = val;
+        }
+        else if(!name.compare("password"))
+        {
+            dbpassword = val;
+        }
+        else if(!name.compare("useauth"))
+        {
+            stringstream thisval(val);
+            thisval >> dbauth;
+        }
+    }
+    file.close();
+    cout << "Read:" <<endl << "hostname: " << dbserver << " database: " << database <<endl << "uname: " << dbuser << " useauth: " << dbauth <<endl;
     init();
 }
 
@@ -49,14 +79,7 @@ void Blog::init() {
     cout << HTTPHTMLHeader();
     //storage is after header so any error messages get outputted
     //if there is no servername, and no auth, use this.
-    if((dbserver.length() == 0) && !dbauth)
-        storage = new StorageEngine();
-    //else if there is auth but no server specified
-    else if(dbserver.length() == 0)
-        storage = new StorageEngine("localhost",dbuser,dbpassword);
-    //else if there is a servername AND password:
-    else
-        storage = new StorageEngine(dbserver,dbuser,dbpassword);
+    storage = new StorageEngine(dbserver,database,dbuser,dbpassword);
     templ = new Template(templatename);
     templ->set_page_title(pagetitle);
     

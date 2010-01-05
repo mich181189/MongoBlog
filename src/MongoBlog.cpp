@@ -10,7 +10,7 @@
 #include "Blog.hpp"
 
 int main() {
-    Blog b;
+    Blog b("blog.cnf");
     b.homepage();
     return 0;
 }

@@ -25,7 +25,7 @@ public:
 class StorageEngine {
 public:
     StorageEngine(std::string username="",std::string pass="");
-    StorageEngine(std::string host,std::string username="",std::string pass="");
+    StorageEngine(std::string host,std::string db,std::string username,std::string pass);
     ~StorageEngine();
     void use(std::string db);
     std::vector<post> getposts(int number = 10);

@@ -32,6 +32,7 @@ private:
     std::string pagetitle;
     std::string dbserver;
     std::string dbuser;
+    std::string database;
     std::string dbpassword;
     bool dbauth;
 };
