@@ -10,7 +10,6 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#define MONGOBLOGVERSION VERSION
 #undef VERSION //needed because otherwise mongo conflicts
 #include <mongo/client/dbclient.h>
 #include "md5.h"
@@ -29,8 +28,9 @@ int main() {
     bool useauth = false;
     bool makeauth = false;
     char buffer[255];
-    cout << "MongoBlog " << MONGOBLOGVERSION << " Configurator" << endl << endl;
+    cout << "MongoBlog Configurator" << endl << endl;
     cout << "Please enter the database server (default: localhost): ";
+    cin.clear();
     cin.get(buffer,255);
     hostname.assign(buffer);
     if(hostname.length() == 0)
@@ -42,7 +42,7 @@ int main() {
     } while(database.length() == 0);
     do {
         cout << "Does this server use authentication? (Y/N) ";
-
+        cin.clear();
         cin.getline(buffer,255);
     } while((buffer[0] != 'y') && (buffer[0] != 'Y') && (buffer[0]!= 'n') && (buffer[0] != 'N'));
     switch(buffer[0]) {
@@ -58,6 +58,7 @@ int main() {
     if(useauth) {
       cout << "Do you want me to create the user on the database? (say yes if the database does not yet exist) (Default: No): ";
       do {
+          cin.clear();
           cin.getline(buffer,255);
           if(buffer[0] == '\0')
           buffer[0] = 'n';
@@ -73,14 +74,19 @@ int main() {
               break;
       }
           cout << "What is the username? :";
+          cin.clear();
           cin >> uname;
           useauth = true;
           cout << "What is the password?: ";
+          cin.clear();
+          cin >> password;
           if(makeauth) {
           cout << "What is the admin username? :";
+          cin.clear();
           cin >> auname;
           useauth = true;
           cout<< "What is the admin password?: ";
+          cin.clear();
           cin >> apassword;
       }
     }

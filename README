@@ -35,3 +35,18 @@ cd /path/to/installed/cgi
 ./MongoDbConfig
 
 and answer the questions.
+
+Security
+===============
+
+I strongly recommend putting the following .htaccess file in with the MongoBlog CGI:
+
+Order Deny,Allow
+Deny from All
+
+<Files MongoBlog >
+     Order Deny,Allow
+     Allow from All
+</Files>
+
+so the config program isn't accessible from  the internet.
