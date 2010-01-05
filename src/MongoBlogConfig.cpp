@@ -71,14 +71,12 @@ int main() {
           case 'N':
               makeauth = false;
               break;
-     
+      }
           cout << "What is the username? :";
           cin >> uname;
           useauth = true;
           cout << "What is the password?: ";
-          cin >> password;
-      }
-      if(makeauth) {
+          if(makeauth) {
           cout << "What is the admin username? :";
           cin >> auname;
           useauth = true;

@@ -41,6 +41,8 @@ Blog::~Blog() {
 
 //constructor that uses a config file
 Blog::Blog(std::string config) {
+    templatename = "hahaha";
+    pagetitle = "MongoBlog";
     fstream file;
     string line;
     file.open(config.c_str(),ios_base::in);
