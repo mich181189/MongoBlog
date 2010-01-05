@@ -39,14 +39,7 @@ and answer the questions.
 Security
 ===============
 
-I strongly recommend putting the following .htaccess file in with the MongoBlog CGI:
-
-Order Deny,Allow
-Deny from All
-
-<Files MongoBlog >
-     Order Deny,Allow
-     Allow from All
-</Files>
-
-so the config program isn't accessible from  the internet.
+I strongly recommend adding the included htaccess file next to the CGI because otherwise the config program
+will be runnable from the internet, which causes the webserver to lock up due to it not being a 
+CGI program, and waiting for input. The htaccess file solves this, and makes nicer URLs as well
+(like /blog/post/post-id/ to access a post)

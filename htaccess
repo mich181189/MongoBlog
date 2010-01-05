@@ -1,0 +1,23 @@
+
+
+RewriteEngine On
+RewriteBase /mb
+RewriteRule   ^$ MongoBlog?%{QUERY_STRING} [L]
+RewriteCond   %{REQUEST_FILENAME} !-f
+RewriteCond   %{REQUEST_FILENAME} !-d
+RewriteRule   ([^/]+)/([^?/]+)([/]*)?(.*) MongoBlog?$1=$2&$4
+
+<Files MongoBlogConfig >
+     Order Deny,Allow
+     Deny from All
+</Files>
+
+<Files blog.cfg >
+     Order Deny,Allow
+     Deny from All
+</Files>
+
+<Files .htaccess >
+     Order Deny,Allow
+     Deny from All
+</Files>

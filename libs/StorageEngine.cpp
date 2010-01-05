@@ -82,6 +82,7 @@ std::vector<post> StorageEngine::getposts(int number) {
             newpost.title = record.getStringField("title");
             newpost.body = record.getStringField("body");
             newpost.timestamp = record.getIntField("timestamp");
+            newpost.oid = getoid(record);
             posts.push_back(newpost);
         }
     } catch( DBException &e ) {
@@ -95,4 +96,49 @@ std::vector<post> StorageEngine::getposts(int number) {
 
 StorageEngine::~StorageEngine() {
     
+}
+
+//Actually makes a post:
+void StorageEngine::dopost(std::string title,std::string body) {
+    time_t t;
+    time(&t);
+    dopost(title,body,t);
+}
+
+void StorageEngine::dopost(std::string title,std::string body,time_t timestamp) {
+    BSONObj post = BSON("title" << title << "body" << body << "timestamp" << (long long int)timestamp);
+    collection = "posts";
+    update_namespace();
+    con.insert(namespacestr,post);
+}
+
+string StorageEngine::getoid(BSONObj post) {
+    BSONElement el;
+    post.getObjectID(el);
+    return el.__oid().str();
+}
+
+post StorageEngine::getpost(std::string oid) {
+    BSONObjBuilder ob;
+    OID oidobj;
+    oidobj.init(oid);
+    ob.appendOID("_id",&oidobj);
+    post newpost;
+    collection = "posts";
+    update_namespace();
+    auto_ptr<DBClientCursor> cursor = con.query(namespacestr,ob.obj());
+    if(cursor->more()) {
+        BSONObj record = cursor->next();
+        newpost.title = record.getStringField("title");
+        newpost.body = record.getStringField("body");
+        newpost.timestamp = record.getIntField("timestamp");
+        newpost.oid = getoid(record);
+    }
+    else {
+        newpost.title = "Post Not Found";
+        stringstream pb;
+        pb << "The post you requested (" << oid << ") was not found.";
+        newpost.body = pb.str();
+    }
+    return newpost;
 }

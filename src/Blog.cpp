@@ -12,6 +12,7 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <boost/algorithm/string.hpp>
 using std::string;
 using std::fstream;
 using std::ios_base;
@@ -20,7 +21,7 @@ using std::vector;
 using std::cout;
 using std::endl;
 using namespace cgicc;
-
+using namespace boost;
 //constructor that uses defaults without loading a config file
 Blog::Blog() {
     templatename = "hahaha";
@@ -96,8 +97,52 @@ void Blog::homepage() {
     else {
         vector<post>::iterator pit;
         for(pit=posts.begin();pit!= posts.end();pit++) {
-            templ->render_post(pit->title,pit->body);
+            stringstream titlelink;
+            if(pit->oid.length() > 0) {
+                titlelink << "<a href=\"post/" << pit->oid << "/\" >" << pit->title << "</a>";
+            }
+            else {
+                titlelink << pit->title;
+            }
+            templ->render_post(titlelink.str(),pit->body);
         }
     }
     templ->render_footer();
 }
+
+void Blog::showPost(string objid) {
+    post p = storage->getpost(objid);
+    templ->render_head();
+    templ->render_post(p.title,p.body);
+    templ->render_footer();
+}
+
+
+//decides what page to show and shows it. This is the main entry point from main.
+void Blog::run() {
+    string get = cgi.getEnvironment().getQueryString();
+    vector<string> args;
+    split(args,get, is_any_of("&") );
+    vector<string>::iterator it;
+    vector<key_val> kvpairs;
+    for(it=args.begin();it<args.end();it++) {
+        vector<string> tmp;
+        split(tmp,*it,is_any_of("="));
+        key_val kv;
+        kv.key = tmp[0];
+        if(tmp.size() > 1)
+            kv.value = tmp[1];
+        kvpairs.push_back(kv);
+    }
+    vector<key_val>::iterator kvit;
+    for(kvit = kvpairs.begin();kvit<kvpairs.end();kvit++) {
+        
+        if(!(kvit->key.compare("post"))) {
+            showPost(kvit->value);
+            return;
+        }
+    }
+    //as a default in case none of the above are present:
+    homepage();
+}
+

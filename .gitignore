@@ -4,8 +4,9 @@ autom4te.cache
 bin/.deps/
 bin/Makefile
 bin/Makefile.in
-bin/MongoBlog
+bin/Mongo*
 bin/MongoBlog.o
+bin/*.cnf
 config.log
 config.status
 configure

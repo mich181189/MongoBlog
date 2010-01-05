@@ -19,7 +19,7 @@ public:
     std::string title;
     std::string body;
     int timestamp;
-    
+    std::string oid;
 };
 
 class StorageEngine {
@@ -29,7 +29,9 @@ public:
     ~StorageEngine();
     void use(std::string db);
     std::vector<post> getposts(int number = 10);
-    void sortposts(std::vector<post> &posts);
+    post getpost(std::string oid);
+    void dopost(std::string title,std::string body);
+    void dopost(std::string title,std::string body,time_t timestamp);
 private:
     mongo::DBClientConnection con;
     std::string hostname;
@@ -40,5 +42,6 @@ private:
     std::string uname;
     std::string password;
     void update_namespace();
+    std::string getoid(mongo::BSONObj post);
 };
 #endif

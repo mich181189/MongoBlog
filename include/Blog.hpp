@@ -14,8 +14,15 @@
 #include <cgicc/Cgicc.h>
 #include <cgicc/HTTPHTMLHeader.h>
 #include <cgicc/HTTPRedirectHeader.h>
+#include <cgicc/CgiEnvironment.h>
 #include "Template.hpp"
 #include "StorageEngine.hpp"
+
+class key_val {
+public:
+    std::string key;
+    std::string value;
+};
 
 class Blog {
 public:
@@ -23,6 +30,8 @@ public:
     Blog(std::string config);
     ~Blog();
     void homepage();
+    void run();
+    void showPost(string objid);
 private:
     cgicc::Cgicc cgi;
     void init();

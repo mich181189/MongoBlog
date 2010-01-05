@@ -11,6 +11,6 @@
 
 int main() {
     Blog b("blog.cnf");
-    b.homepage();
+    b.run();
     return 0;
 }
