@@ -6,6 +6,11 @@ AC_PROG_CXX
 AC_LANG_CPLUSPLUS
 AC_PROG_LIBTOOL
 AC_C_INLINE
+AX_PTHREAD
+LIBS="$PTHREAD_LIBS $LIBS"
+CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+CC="$PTHREAD_CC"
+
 #checks for cgicc
 AC_ARG_WITH(libcgicc,AC_HELP_STRING([--with-libcgicc=DIR],[specifies where to find libcgicc]),[libcgicc_dir="$withval"],[libcgicc_dir=""])
 if test -d "$libcgicc_dir"; then
@@ -34,6 +39,5 @@ AC_CONFIG_FILES([
 Makefile 
 bin/Makefile 
 libs/Makefile 
-libs/Template/Makefile
 ])
 AC_OUTPUT

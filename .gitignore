@@ -10,3 +10,12 @@ config.log
 config.status
 configure
 src/.deps/
+*.la
+*.lo
+*.o
+libtool
+libs/Template/.deps/
+libs/Template/.libs/
+bin/.libs/
+libs/.deps/
+libs/.libs/

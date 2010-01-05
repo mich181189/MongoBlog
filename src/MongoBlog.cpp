@@ -7,27 +7,10 @@
 //                                                                   //
 ///////////////////////////////////////////////////////////////////////
 
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-#include <cgicc/Cgicc.h>
-#include <cgicc/HTTPHTMLHeader.h>
-#include <cgicc/HTTPRedirectHeader.h>
-#include "Template.hpp"
-
-using std::cout;
-using std::endl;
-using std::ifstream;
-using namespace cgicc;
+#include "Blog.hpp"
 
 int main() {
-    Cgicc cgi;
-    cout << HTTPHTMLHeader();
-    Template templ("hahaha");
-    templ.set_page_title("MongoBlog");
-    templ.render_head();
-    templ.render_post("title","body");
-    templ.render_post("title","body");
-    templ.render_footer();
+    Blog b;
+    b.homepage();
     return 0;
 }
