@@ -1,0 +1,37 @@
+///////////////////////////////////////////////////////////////////////
+//   								     //
+//   MongBlog - Superfast simple blogging platform                   //
+//   Readme                                                          //
+//   (c) 2010 Michael Cullen http://cullen-online.com                //
+//   Released under the BSD licence as define in the                 //
+//   accompanying LICENCE file. Please read it :-)                   //
+//                                                                   //
+///////////////////////////////////////////////////////////////////////
+
+To Build from git:
+
+run ./toolconfig.sh
+
+then continue as below:
+
+To build from tarball:
+
+You need libMongoClient installed, and relevant libboost versions.
+It's basically the standard install/configure step, except you set the bin dir
+to the location you want the cgi to be in.
+
+./configure --bindir=/path/to/cgi
+make
+(then as root)
+make install
+
+if you get errors about the shared object not being found,
+try running ldconfig as root.
+
+Configuring:
+copy the folder mbTemplates to one level above the executable, then:
+
+cd /path/to/installed/cgi
+./MongoDbConfig
+
+and answer the questions.
