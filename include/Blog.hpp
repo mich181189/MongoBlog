@@ -26,7 +26,6 @@ public:
 
 class Blog {
 public:
-    Blog();
     Blog(std::string config);
     ~Blog();
     void homepage();

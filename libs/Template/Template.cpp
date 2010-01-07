@@ -14,20 +14,21 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
+#include <ios>
 using std::string;
 using std::cout;
 using std::endl;
 using std::stringstream;
 using std::fstream;
-
+using std::ios_base;
 Template::Template(string name) {
     //Set default page title
-    page_title = "Mwhahaha";
+    page_title = "MongoBlog";
     stringstream fname;
     fstream file;
     //get head file from template
     fname << "mbTemplate/" << name << "/head.txt";
-    file.open(fname.str().c_str());
+    file.open(fname.str().c_str(),ios_base::in);
     if(!file) {
         cout << "Cannot open |" << fname.str().c_str() << "|" << endl << "Exiting now.";
         exit(0);
@@ -41,7 +42,7 @@ Template::Template(string name) {
     fname.str("");
     //get footer from template
     fname << "mbTemplate/" << name << "/footer.txt";
-    file.open(fname.str().c_str());
+    file.open(fname.str().c_str(),ios_base::in);
     if(!file) {
         cout << "Cannot open |" << fname.str().c_str() << "|" << endl << "Exiting now.";
         exit(0);
@@ -55,7 +56,7 @@ Template::Template(string name) {
      fname.str("");
      //get post file from template
     fname << "mbTemplate/" << name << "/post.txt";
-    file.open(fname.str().c_str());
+    file.open(fname.str().c_str(),ios_base::in);
     if(!file) {
         cout << "Cannot open |" << fname.str().c_str() << "|" << endl << "Exiting now.";
         exit(0);

@@ -22,16 +22,6 @@ using std::cout;
 using std::endl;
 using namespace cgicc;
 using namespace boost;
-//constructor that uses defaults without loading a config file
-Blog::Blog() {
-    templatename = "hahaha";
-    pagetitle = "MongoBlog";
-    dbserver = "";
-    dbauth = false;
-    database = "MongoBlog";
-    
-    init();
-}
 
 Blog::~Blog() {
     if(templ)
@@ -42,6 +32,9 @@ Blog::~Blog() {
 
 void Blog::urlDeEncode(string &str) {
     str = templ->substitute(str,"+"," ");
+    str = templ->substitute(str,"%27","'");
+    str = templ->substitute(str,"%0A","\n");
+    str = templ->substitute(str,"%0D","\r");
     str = templ->substitute(str,"%2B","+");
     str = templ->substitute(str,"%24","$");
     str = templ->substitute(str,"%26","&");
@@ -55,8 +48,10 @@ void Blog::urlDeEncode(string &str) {
     str = templ->substitute(str,"%20"," ");
     str = templ->substitute(str,"%22","\"");
     str = templ->substitute(str,"%3C","<");
-    str = templ->substitute(str,"3E",">");
-    str = templ->substitute(str,"23","#");
+    str = templ->substitute(str,"%3E",">");
+    str = templ->substitute(str,"%23","#");
+    str = templ->substitute(str,"%28","(");
+    str = templ->substitute(str,"%29",")");
     str = templ->substitute(str,"%7B","{");
     str = templ->substitute(str,"%7D","}");
     str = templ->substitute(str,"%5C","|");
@@ -179,7 +174,7 @@ void Blog::login_proc(vector<key_val> kvpairs) {
         flush(cout);
         //if login didn't fail
         if(cookie.length() > 0) {
-            cout << HTTPHTMLHeader().setCookie(HTTPCookie("MongoBlogUser",cookie,"","",0,"/mb",0));
+            cout << HTTPHTMLHeader().setCookie(HTTPCookie("MongoBlogUser",cookie,"","",0,"",0));
             flush(cout);
         }
         else cout << HTTPHTMLHeader();
