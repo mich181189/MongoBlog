@@ -40,6 +40,35 @@ Blog::~Blog() {
         delete storage;
 }
 
+void Blog::urlDeEncode(string &str) {
+    str = templ->substitute(str,"+"," ");
+    str = templ->substitute(str,"%2B","+");
+    str = templ->substitute(str,"%24","$");
+    str = templ->substitute(str,"%26","&");
+    str = templ->substitute(str,"%2C",",");
+    str = templ->substitute(str,"%2F","/");
+    str = templ->substitute(str,"%3A",":");
+    str = templ->substitute(str,"%3B",";");
+    str = templ->substitute(str,"%3D","=");
+    str = templ->substitute(str,"%3F","?");
+    str = templ->substitute(str,"%40","@");
+    str = templ->substitute(str,"%20"," ");
+    str = templ->substitute(str,"%22","\"");
+    str = templ->substitute(str,"%3C","<");
+    str = templ->substitute(str,"3E",">");
+    str = templ->substitute(str,"23","#");
+    str = templ->substitute(str,"%7B","{");
+    str = templ->substitute(str,"%7D","}");
+    str = templ->substitute(str,"%5C","|");
+    str = templ->substitute(str,"%5E","^");
+    str = templ->substitute(str,"%7E","~");
+    str = templ->substitute(str,"%5B","[");
+    str = templ->substitute(str,"%5D","]");
+    str = templ->substitute(str,"%60","`");
+    str = templ->substitute(str,"%25","%");
+    
+}
+
 //constructor that uses a config file
 Blog::Blog(std::string config) {
     templatename = "hahaha";
@@ -87,13 +116,17 @@ void Blog::init() {
     vector<key_val>::iterator it;
     bool headers_sent = false;
     for(it=kvpairs.begin();it<kvpairs.end();it++) {
+        //is it a login attempt?
         if(!it->key.compare("user")) {
             flush(cout);
             login_proc(kvpairs);
             headers_sent = true;
         }
-        else if(!it->key.compare("post")) {
-            //do post
+        //is it a post?
+        else if(!it->key.compare("body")) {
+            if(admin_cookie()) {
+                post_proc(kvpairs);
+            }
         }
     }
     if(!headers_sent)
@@ -103,6 +136,25 @@ void Blog::init() {
     templ = new Template(templatename);
     templ->set_page_title(pagetitle);
     
+}
+
+void Blog::post_proc(vector<key_val> kvpairs) {
+    string title;
+    string body;
+    vector<key_val>::iterator it;
+    for(it=kvpairs.begin();it<kvpairs.end();it++) {
+        if(!it->key.compare("title")) {
+            title = it->value;
+            urlDeEncode(title);
+        }
+        else if(!it->key.compare("body")) {
+            body = it->value;
+            urlDeEncode(body);
+        }
+    }
+    if(body.length() > 0) {
+        storage->dopost(title,body);
+    }
 }
 
 void Blog::login_proc(vector<key_val> kvpairs) {
@@ -146,6 +198,7 @@ void Blog::homepage() {
         vector<post>::iterator pit;
         for(pit=posts.begin();pit!= posts.end();pit++) {
             stringstream titlelink;
+            //if oid is set, it's a post, otherwise it's a message.
             if(pit->oid.length() > 0) {
                 titlelink << "<a href=\"post/" << pit->oid << "/\" >" << pit->title << "</a>";
             }
@@ -235,6 +288,12 @@ void Blog::admin() {
         return;
     }
     templ->render_head();
-    cout << "ADMINY STUFF GOES HERE." << endl;
+    stringstream out;
+    out << "<form method=\"POST\" action=\"\">" << endl
+        << "Title: <input name=\"title\" type=\"text\"/><br/>" << endl
+        << "Post Body: <textarea name=\"body\"></textarea><br/>" << endl
+        << "<input name=\"sub\" type=\"submit\"/><br/>" << endl
+        << "</form>" << endl;
+    templ->render_post("Make post",out.str());
     templ->render_footer();
 }

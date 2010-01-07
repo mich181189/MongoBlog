@@ -31,7 +31,7 @@ public:
     ~Blog();
     void homepage();
     void run();
-    void showPost(string objid);
+    void showPost(std::string objid);
     void admin();
     void login();
 private:
@@ -49,5 +49,7 @@ private:
     bool admin_cookie();
     std::vector<key_val> parseargs(std::string in);
     void login_proc(std::vector<key_val> kvpairs);
+    void post_proc(std::vector<key_val> kvpairs);
+    void urlDeEncode(std::string &str);
 };
 #endif

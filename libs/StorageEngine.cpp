@@ -138,8 +138,12 @@ void StorageEngine::dopost(std::string title,std::string body,time_t timestamp) 
     BSONObj post = BSON("title" << title << "body" << body << "timestamp" << (long long int)timestamp);
     collection = "posts";
     update_namespace();
-    con.insert(namespacestr,post);
-    con.ensureIndex(namespacestr,BSON("timestamp" << 1),true);
+    try {
+        con.insert(namespacestr,post);
+        con.ensureIndex(namespacestr,BSON("timestamp" << 1),true);
+    } catch(DBException &e) {
+        cout << "Error: " << e.what() <<endl;
+    }
     
 }
 

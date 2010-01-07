@@ -10,28 +10,28 @@
 #ifndef TEMPLATE_HPP
 #define TEMPLATE_HPP
 #include <string>
-using std::string;
 
 class Template {
 public:
-    Template(string name);
+    Template(std::string name);
     ~Template();
     void render_head();
-    void render_post(string title,string body);
+    void render_post(std::string title,std::string body);
     void render_footer();
-    void set_page_title(string title);
+    void set_page_title(std::string title);
+    std::string substitute(std::string input,std::string needle,std::string replacement);
+
 private:
-    string header;
-    string post;
-    string footer;
-    string page_title;
+    std::string header;
+    std::string post;
+    std::string footer;
+    std::string page_title;
     //replace one specific chunk
-    string substitute(string input,string needle,string replacement);
     //do all standard replacements
-    string substitute(string input);
+    std::string substitute(std::string input);
     //Date functions now
-    string dayofweek(int num);
-    string num_suffix(int num);
-    string monthname(int num);
+    std::string dayofweek(int num);
+    std::string num_suffix(int num);
+    std::string monthname(int num);
 };
 #endif
