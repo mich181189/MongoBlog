@@ -32,6 +32,8 @@ public:
     void homepage();
     void run();
     void showPost(string objid);
+    void admin();
+    void login();
 private:
     cgicc::Cgicc cgi;
     void init();
@@ -44,5 +46,8 @@ private:
     std::string database;
     std::string dbpassword;
     bool dbauth;
+    bool admin_cookie();
+    std::vector<key_val> parseargs(std::string in);
+    void login_proc(std::vector<key_val> kvpairs);
 };
 #endif

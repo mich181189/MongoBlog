@@ -124,5 +124,31 @@ int main() {
             
         }
     }
+    
+    string un;
+    string pw;
+    cin.clear();
+    cout << "Do you want me to create the admin user on the blog? (say yes if this is a new install): ";
+      do {
+          cin.clear();
+          cin.getline(buffer,255);
+      } while((buffer[0] != 'y') && (buffer[0] != 'Y') && (buffer[0] != 'n') && (buffer[0] != 'N'));
+      switch(buffer[0]) {
+          case 'y':
+          case 'Y':
+              cout << "Username: ";
+              cin >> un;
+              cout << "Password: ";
+              cin >> pw;
+              stringstream namespacess;
+              namespacess << database << ".users";
+              string error;
+              con.auth(database,uname,password,error,true);
+              cout << error;
+              con.dropCollection(namespacess.str());
+              con.insert(namespacess.str(),BSON("UserName" << un << "Password" << MD5(pw).hexdigest() << "is_admin" << 1));
+              con.ensureIndex(namespacess.str(),BSON("UserName" << 1),true);
+              break;
+      }
     return 0;
 }

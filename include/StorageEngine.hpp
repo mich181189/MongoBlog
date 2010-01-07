@@ -22,6 +22,14 @@ public:
     std::string oid;
 };
 
+class User {
+public:
+    std::string username;
+    std::string password;
+    bool is_admin;
+    User() {is_admin = false;}
+};
+
 class StorageEngine {
 public:
     StorageEngine(std::string username="",std::string pass="");
@@ -32,6 +40,8 @@ public:
     post getpost(std::string oid);
     void dopost(std::string title,std::string body);
     void dopost(std::string title,std::string body,time_t timestamp);
+    void getUser(User &u,std::string cookie_id);
+    std::string login(std::string username,std::string password);
 private:
     mongo::DBClientConnection con;
     std::string hostname;
@@ -43,5 +53,6 @@ private:
     std::string password;
     void update_namespace();
     std::string getoid(mongo::BSONObj post);
+    mongo::BSONObj getoid(std::string oid);
 };
 #endif

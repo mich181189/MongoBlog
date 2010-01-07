@@ -13,6 +13,8 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include "md5.h"
+
 using std::string;
 using std::cout;
 using std::endl;
@@ -42,6 +44,7 @@ void StorageEngine::use(string db) {
 
 //updates namespace string - called after db or collection change.
 void StorageEngine::update_namespace() {
+    flush(cout);
     stringstream ss;
     ss << database << "." << collection;
     namespacestr = ss.str();
@@ -105,11 +108,39 @@ void StorageEngine::dopost(std::string title,std::string body) {
     dopost(title,body,t);
 }
 
+//returns cookie ID or empty string on failure.
+string StorageEngine::login(string username,string password) {
+    collection = "users";
+    update_namespace();
+    string outs;
+    flush(cout);
+    try {
+        
+    auto_ptr< DBClientCursor > ptr = con.query(namespacestr,QUERY("UserName" << username << "Password" << MD5(password).hexdigest()));
+    
+    if(ptr->more()) {
+        stringstream cookiestring;
+        cookiestring << time(NULL) << "<>" << username << "<>" << rand();
+        outs = MD5(cookiestring.str()).hexdigest();
+        collection = "cookies";
+        update_namespace();
+        con.insert(namespacestr,BSON("cid" << outs << "uid" << getoid(ptr->next())));
+    }
+    }
+    catch(DBException &e ) {
+        cout << "Caught " << e.what() << endl;
+        flush(cout);
+    }
+    return outs;
+}
+
 void StorageEngine::dopost(std::string title,std::string body,time_t timestamp) {
     BSONObj post = BSON("title" << title << "body" << body << "timestamp" << (long long int)timestamp);
     collection = "posts";
     update_namespace();
     con.insert(namespacestr,post);
+    con.ensureIndex(namespacestr,BSON("timestamp" << 1),true);
+    
 }
 
 string StorageEngine::getoid(BSONObj post) {
@@ -119,14 +150,10 @@ string StorageEngine::getoid(BSONObj post) {
 }
 
 post StorageEngine::getpost(std::string oid) {
-    BSONObjBuilder ob;
-    OID oidobj;
-    oidobj.init(oid);
-    ob.appendOID("_id",&oidobj);
     post newpost;
     collection = "posts";
     update_namespace();
-    auto_ptr<DBClientCursor> cursor = con.query(namespacestr,ob.obj());
+    auto_ptr<DBClientCursor> cursor = con.query(namespacestr,getoid(oid));
     if(cursor->more()) {
         BSONObj record = cursor->next();
         newpost.title = record.getStringField("title");
@@ -141,4 +168,33 @@ post StorageEngine::getpost(std::string oid) {
         newpost.body = pb.str();
     }
     return newpost;
+}
+
+BSONObj StorageEngine::getoid(string oid) {
+    OID oidobj;
+    oidobj.init(oid);
+    BSONObjBuilder ob;
+    ob.appendOID("_id",&oidobj);
+    return ob.obj();    
+}
+
+void StorageEngine::getUser(User &u,std::string cookie_id) {
+    collection = "cookies";
+    update_namespace();
+    auto_ptr<DBClientCursor> cursor = con.query(namespacestr,QUERY("cid" << cookie_id));
+    if(cursor->more()) {
+        BSONObj record = cursor->next();
+        string oid = record.getStringField("uid");
+        collection = "users";
+        update_namespace();
+        auto_ptr<DBClientCursor> cursor_b = con.query(namespacestr,getoid(oid));
+        if(cursor_b->more()) {
+            BSONObj rec = cursor_b->next();
+            u.username = rec.getStringField("UserName");
+            u.is_admin = rec.getIntField("is_admin");
+        }
+        else {
+            cout << "The user mentioned in the cookie does not exist!" << endl;
+        }
+    }
 }

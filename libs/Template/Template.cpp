@@ -26,7 +26,7 @@ Template::Template(string name) {
     stringstream fname;
     fstream file;
     //get head file from template
-    fname << getenv("DOCUMENT_ROOT") << "/mbTemplate/" << name << "/head.txt";
+    fname << "mbTemplate/" << name << "/head.txt";
     file.open(fname.str().c_str());
     if(!file) {
         cout << "Cannot open |" << fname.str().c_str() << "|" << endl << "Exiting now.";
@@ -40,7 +40,7 @@ Template::Template(string name) {
     file.close();
     fname.str("");
     //get footer from template
-    fname << getenv("DOCUMENT_ROOT") << "/mbTemplate/" << name << "/footer.txt";
+    fname << "mbTemplate/" << name << "/footer.txt";
     file.open(fname.str().c_str());
     if(!file) {
         cout << "Cannot open |" << fname.str().c_str() << "|" << endl << "Exiting now.";
@@ -54,7 +54,7 @@ Template::Template(string name) {
     
      fname.str("");
      //get post file from template
-    fname << getenv("DOCUMENT_ROOT") << "/mbTemplate/" << name << "/post.txt";
+    fname << "mbTemplate/" << name << "/post.txt";
     file.open(fname.str().c_str());
     if(!file) {
         cout << "Cannot open |" << fname.str().c_str() << "|" << endl << "Exiting now.";
