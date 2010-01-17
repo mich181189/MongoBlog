@@ -175,6 +175,7 @@ void Blog::login_proc(vector<key_val> kvpairs) {
         //if login didn't fail
         if(cookie.length() > 0) {
             cout << HTTPHTMLHeader().setCookie(HTTPCookie("MongoBlogUser",cookie,"","",0,"",0));
+            recentcookie = cookie;
             flush(cout);
         }
         else cout << HTTPHTMLHeader();
@@ -256,10 +257,15 @@ bool Blog::admin_cookie() {
     const_cookie_iterator it;
     CgiEnvironment env = cgi.getEnvironment();
     User u;
-    for(it=env.getCookieList().begin();it<env.getCookieList().end();it++) {
-        if(!(it->getName().compare("MongoBlogUser"))) {
-            storage->getUser(u,it->getValue());
-            break; //get out of for loop - we've found the cookie!
+    if(recentcookie.length() > 0) {
+        storage->getUser(u,recentcookie);
+    }
+    else {
+        for(it=env.getCookieList().begin();it<env.getCookieList().end();it++) {
+            if(!(it->getName().compare("MongoBlogUser"))) {
+                storage->getUser(u,it->getValue());
+                break; //get out of for loop - we've found the cookie!
+            }
         }
     }
     return u.is_admin;

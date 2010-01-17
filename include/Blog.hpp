@@ -44,6 +44,7 @@ private:
     std::string dbuser;
     std::string database;
     std::string dbpassword;
+    std::string recentcookie; //so we know if one's just been set.
     bool dbauth;
     bool admin_cookie();
     std::vector<key_val> parseargs(std::string in);
