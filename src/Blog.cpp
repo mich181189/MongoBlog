@@ -60,8 +60,8 @@ void Blog::urlDeEncode(string &str) {
     str = templ->substitute(str,"%5B","[");
     str = templ->substitute(str,"%5D","]");
     str = templ->substitute(str,"%60","`");
+    str = templ->substitute(str,"%21","!");
     str = templ->substitute(str,"%25","%");
-    
 }
 
 //constructor that uses a config file
@@ -296,5 +296,23 @@ void Blog::admin() {
         << "<input name=\"sub\" type=\"submit\"/><br/>" << endl
         << "</form>" << endl;
     templ->render_post("Make post",out.str());
+    out.str("");
+    
+    vector<post> posts = storage->getposts();
+    if(posts.size() == 0) {
+        templ->render_post("<tr><td colspan=3>Post not found","There are no posts here.</td></tr>");
+    }
+    else {
+        out << "<table border=\"0\"><tr><td>Title</td><td>Body</td><td>Actions</td></tr>" << endl;
+        vector<post>::iterator pit;
+        for(pit=posts.begin();pit!= posts.end();pit++) {
+            if(pit->body.length() > 140)
+                pit->body.resize(140);
+            out << "<tr><td>" << pit->title << "</td><td>" << pit->body << "</td><td>" << pit->oid << "</td></tr>" << endl;
+        }
+        out << "</table>" << endl;
+    templ->render_post("Manage posts",out.str());
+    }
+    
     templ->render_footer();
 }
