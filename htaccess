@@ -1,11 +1,12 @@
-
+Options +ExecCGI
+AddHandler cgi-script .cgi
 
 RewriteEngine On
 RewriteBase /mb
-RewriteRule   ^$ MongoBlog?%{QUERY_STRING} [L]
+RewriteRule   ^$ MongoBlog.cgi?%{QUERY_STRING} [L]
 RewriteCond   %{REQUEST_FILENAME} !-f
 RewriteCond   %{REQUEST_FILENAME} !-d
-RewriteRule   ([^/]+)/([^?/]*)([/]*)?(.*) MongoBlog?$1=$2&$4
+RewriteRule   ([^/]+)/([^?/]*)([/]*)?(.*) MongoBlog.cgi?$1=$2&$3
 
 <Files MongoBlogConfig >
      Order Deny,Allow

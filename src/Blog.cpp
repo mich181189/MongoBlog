@@ -181,7 +181,7 @@ void Blog::login_proc(vector<key_val> kvpairs) {
         else cout << HTTPHTMLHeader();
     }
     flush(cout);
-    exit;
+    exit(0);
 }
 
 void Blog::homepage() {
@@ -288,6 +288,8 @@ void Blog::admin() {
         login();
         return;
     }
+    vector<post> posts = storage->getposts();
+    
     templ->render_head();
     stringstream out;
     out << "<form method=\"POST\" action=\"\">" << endl
@@ -298,7 +300,6 @@ void Blog::admin() {
     templ->render_post("Make post",out.str());
     out.str("");
     
-    vector<post> posts = storage->getposts();
     if(posts.size() == 0) {
         templ->render_post("<tr><td colspan=3>Post not found","There are no posts here.</td></tr>");
     }

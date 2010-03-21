@@ -28,49 +28,37 @@ Template::Template(string name) {
     fstream file;
     //get head file from template
     fname << "mbTemplate/" << name << "/head.txt";
-    file.open(fname.str().c_str(),ios_base::in);
-    if(!file) {
-        cout << "Cannot open |" << fname.str().c_str() << "|" << endl << "Exiting now.";
-        exit(0);
-    }
-    string line;
-    while(file >> line) {
-        header.append(line);
-        header.push_back('\n');
-    }
-    file.close();
+    header = getFile(fname.str());
     fname.str("");
     //get footer from template
     fname << "mbTemplate/" << name << "/footer.txt";
-    file.open(fname.str().c_str(),ios_base::in);
-    if(!file) {
-        cout << "Cannot open |" << fname.str().c_str() << "|" << endl << "Exiting now.";
-        exit(0);
-    }
-    while(file >> line) {
-        footer.append(line);
-        footer.push_back('\n');
-    }
-    file.close();
+    footer = getFile(fname.str());
     
      fname.str("");
      //get post file from template
     fname << "mbTemplate/" << name << "/post.txt";
-    file.open(fname.str().c_str(),ios_base::in);
-    if(!file) {
-        cout << "Cannot open |" << fname.str().c_str() << "|" << endl << "Exiting now.";
-        exit(0);
-    }
-    
-    while(file >> line) {
-        post.append(line);
-        post.push_back('\n');
-    }
-    file.close();
+    post = getFile(fname.str());
 }
 
 Template::~Template() {
     
+}
+
+//You might want to read an entire file in. For example, the above template loader,
+//or including javascript directly inline:
+string Template::getFile(string fname) {
+    fstream file;
+    string line,out;
+    file.open(fname.c_str());
+    if(!file.is_open()) {
+        cout << "Cannot open |" << fname << "|" << endl << "Exiting now.";
+    }
+    while(file >> line) {
+        out.append(line);
+        out.push_back('\n');
+    }
+    file.close();
+    return out;
 }
 
 string Template::substitute(string input,string needle,string replacement) {
@@ -191,8 +179,9 @@ string Template::substitute(string input) {
     return output;
 }
 
-void Template::render_head() {
-    cout << substitute(header);
+void Template::render_head(string extra) {
+    string out = substitute(header);
+    cout << substitute(out,"[EXTRA]",extra);
 }
 
 void Template::render_post(string title,string body) {

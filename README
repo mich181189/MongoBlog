@@ -36,6 +36,13 @@ cd /path/to/installed/cgi
 
 and answer the questions.
 
+Apache Fun
+===============
+
+This program now has the ending .cgi which means that you can now use an AddType declaration
+instead of a scriptalias. This is important as otherwise any external images or js files
+would have been difficult to include.
+
 Security
 ===============
 

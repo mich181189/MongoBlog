@@ -15,12 +15,13 @@ class Template {
 public:
     Template(std::string name);
     ~Template();
-    void render_head();
+    void render_head(std::string extra = "");
     void render_post(std::string title,std::string body);
     void render_footer();
     void set_page_title(std::string title);
     std::string substitute(std::string input,std::string needle,std::string replacement);
-
+    std::string getFile(std::string fname);
+    
 private:
     std::string header;
     std::string post;

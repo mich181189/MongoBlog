@@ -53,6 +53,9 @@ body {
 }
 
   </style>
+  <!-- Extra page specific stuff-->
+  [EXTRA]
+  <!-- End Extra page specific stuff-->
 </head>
 <body>
 <div class="page_header">[TITLE]</div>
