@@ -23,9 +23,10 @@ AX_BOOST_BASE([1.33.1])
 AX_BOOST_SYSTEM
 AX_BOOST_FILESYSTEM
 AX_BOOST_THREAD
+AX_BOOST_PROGRAM_OPTIONS
 CPPFLAGS="${CPPFLAGS} ${BOOST_CPPFLAGS}"
 LDFLAGS="${LDFLAGS} ${BOOST_LDFLAGS}"
-LIBS="${LIBS} $BOOST_THREAD_LIB $BOOST_FILESYSTEM_LIB $BOOST_SYSTEM_LIB"
+LIBS="${LIBS} $BOOST_THREAD_LIB $BOOST_FILESYSTEM_LIB $BOOST_SYSTEM_LIB $BOOST_PROGRAM_OPTIONS_LIB"
 #checks for mongo client
 AC_ARG_WITH(libmongoclient,AC_HELP_STRING([--with-libmongoclient=DIR],[specifies where to find libmongoclient]),[libcgicc_dir="$withval"],[libmongoclient_dir=""])
 if test -d "$libmongoclient_dir"; then

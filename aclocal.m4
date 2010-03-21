@@ -7249,6 +7249,7 @@ AC_SUBST([am__untar])
 
 m4_include([aclocal/ax_boost_base.m4])
 m4_include([aclocal/ax_boost_filesystem.m4])
+m4_include([aclocal/ax_boost_program_options.m4])
 m4_include([aclocal/ax_boost_system.m4])
 m4_include([aclocal/ax_boost_thread.m4])
 m4_include([acinclude.m4])
