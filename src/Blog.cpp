@@ -304,16 +304,28 @@ void Blog::admin() {
     vector<post> posts = storage->getposts();
     stringstream js;
     js << "<script type=\"text/javascript\" src=\"/static/jquery.js\"></script>";
+    js << "<script type=\"text/javascript\" src=\"/static/tiny_mce/tiny_mce.js\"></script>";
+    js << "<script type=\"text/javascript\" src=\"/static/tiny_mce/jquery.tinymce.js\"></script>";
     js << "<script type=\"text/javascript\">";
-    vector<post>::iterator pit;
     js << " $(document).ready(function(){" << endl;
+    js << "$(\"#textareabox\").tinymce({" << endl;
+    js << "script_url : '/static/tiny_mce/tiny_mce.js'," << endl;
+    js << "mode : \"textareas\"," << endl;
+    js << "theme : \"advanced\"," << endl;
+    js << "plugins : \"safari,advlink,table,spellchecker,pagebreak,style,layer,\"," << endl;
+    js << "theme_advanced_buttons1 :  \",bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect,forecolor,\"," << endl;
+    js << "theme_advanced_buttons2 :  \"cut,copy,paste,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,|,code|,fullscreen\"," << endl;
+    js << "theme_advanced_buttons3 :   \"tablecontrols,|,hr,sub,sup,|,charmap,spellchecker,|,cite,abbr,acronym,del,ins,attribs\"," << endl;
+    js << "theme_advanced_toolbar_location : \"top\",";
+    js << "});" << endl;
     //wow jquery looks horrible in C++...
+    vector<post>::iterator pit;
     for(pit=posts.begin();pit!= posts.end();pit++) {
-        js << "$(\"#" << pit->oid << "\").click(function() {" << endl;
+        js << "$(\"#" << pit->oid << "\").click(function(event) {" << endl;
+        js << "event.preventDefault();";
         js << "$(\"#titlebox\").val(\"" << templ->substitute(pit->title,"\"","\\\"") << "\");" << endl;
         js << "$(\"#id\").val(\"" << pit->oid << "\");" << endl;
-        js << "$(\"#textareabox\").val(\"" << templ->substitute(templ->substitute(templ->substitute(pit->body,"\"","\\\""),"\n","\\\n"),"\r","") << "\");" << 
-endl;
+        js << "$(\"#textareabox\").html('" << templ->substitute(templ->substitute(templ->substitute(pit->body,"\"","\\\""),"\n","\\\n"),"\r","") << "');" << endl;
         js << "});";
     }
     js <<  "});";
