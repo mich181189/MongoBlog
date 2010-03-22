@@ -136,6 +136,8 @@ void Blog::init() {
 void Blog::post_proc(vector<key_val> kvpairs) {
     string title;
     string body;
+    bool update = false;
+    string oid;
     vector<key_val>::iterator it;
     for(it=kvpairs.begin();it<kvpairs.end();it++) {
         if(!it->key.compare("title")) {
@@ -146,9 +148,20 @@ void Blog::post_proc(vector<key_val> kvpairs) {
             body = it->value;
             urlDeEncode(body);
         }
+        else if(!it->key.compare("id")) {
+            oid = it->value;
+            urlDeEncode(oid);
+            if(oid.length() > 0)
+                update = true;
+        }
     }
     if(body.length() > 0) {
-        storage->dopost(title,body);
+        if(update) {
+            storage->dopost(title,body,oid);
+        }
+        else {
+            storage->dopost(title,body);
+        }
     }
 }
 
@@ -289,12 +302,27 @@ void Blog::admin() {
         return;
     }
     vector<post> posts = storage->getposts();
-    
-    templ->render_head();
+    stringstream js;
+    js << "<script type=\"text/javascript\" src=\"/static/jquery.js\"></script>";
+    js << "<script type=\"text/javascript\">";
+    vector<post>::iterator pit;
+    js << " $(document).ready(function(){" << endl;
+    //wow jquery looks horrible in C++...
+    for(pit=posts.begin();pit!= posts.end();pit++) {
+        js << "$(\"#" << pit->oid << "\").click(function() {" << endl;
+        js << "$(\"#titlebox\").val(" << pit->title << ");" << endl;
+        js << "$(\"#id\").val(\"" << pit->oid << "\");" << endl;
+        js << "$(\"#textareabox\").val(\"" << pit->body << "\");" << endl;
+        js << "});";
+    }
+    js <<  "});";
+    js << "</script>";
+    templ->render_head(js.str());
     stringstream out;
     out << "<form method=\"POST\" action=\"\">" << endl
-        << "Title: <input name=\"title\" type=\"text\"/><br/>" << endl
-        << "Post Body: <textarea name=\"body\"></textarea><br/>" << endl
+        << "Title: <input id=\"titlebox\" name=\"title\" type=\"text\"/><br/>" << endl
+        << "Post Body: <textarea id=\"textareabox\" name=\"body\"></textarea><br/>" << endl
+        << "<input id=\"id\" name=\"id\" type=\"hidden\"/>" << endl
         << "<input name=\"sub\" type=\"submit\"/><br/>" << endl
         << "</form>" << endl;
     templ->render_post("Make post",out.str());
@@ -309,7 +337,7 @@ void Blog::admin() {
         for(pit=posts.begin();pit!= posts.end();pit++) {
             if(pit->body.length() > 140)
                 pit->body.resize(140);
-            out << "<tr><td>" << pit->title << "</td><td>" << pit->body << "</td><td>" << pit->oid << "</td></tr>" << endl;
+            out << "<tr><td>" << pit->title << "</td><td>" << pit->body << "</td><td> <a href=\"#\" id=\"" << pit->oid << "\">Edit</a></td></tr>" << endl;
         }
         out << "</table>" << endl;
     templ->render_post("Manage posts",out.str());

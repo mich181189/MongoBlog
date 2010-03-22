@@ -52,6 +52,7 @@ string Template::getFile(string fname) {
     file.open(fname.c_str());
     if(!file.is_open()) {
         cout << "Cannot open |" << fname << "|" << endl << "Exiting now.";
+        exit(-1);
     }
     while(file >> line) {
         out.append(line);

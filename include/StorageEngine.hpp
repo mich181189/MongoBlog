@@ -40,6 +40,7 @@ public:
     post getpost(std::string oid);
     void dopost(std::string title,std::string body);
     void dopost(std::string title,std::string body,time_t timestamp);
+    void dopost(std::string title,std::string body,std::string oid); //for updates
     void getUser(User &u,std::string cookie_id);
     std::string login(std::string username,std::string password);
 private:
