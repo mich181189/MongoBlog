@@ -325,7 +325,7 @@ void Blog::admin() {
         js << "event.preventDefault();";
         js << "$(\"#titlebox\").val(\"" << templ->substitute(pit->title,"\"","\\\"") << "\");" << endl;
         js << "$(\"#id\").val(\"" << pit->oid << "\");" << endl;
-        js << "$(\"#textareabox\").html('" << templ->substitute(templ->substitute(templ->substitute(pit->body,"\"","\\\""),"\n","\\\n"),"\r","") << "');" << endl;
+        js << "$(\"#textareabox\").html('" << templ->substitute(templ->substitute(templ->substitute(templ->substitute(pit->body,"\"","\\\""),"\n","\\\n"),"\r",""),"'","\\'") << "');" << endl;
         js << "});";
     }
     js <<  "});";
