@@ -310,9 +310,10 @@ void Blog::admin() {
     //wow jquery looks horrible in C++...
     for(pit=posts.begin();pit!= posts.end();pit++) {
         js << "$(\"#" << pit->oid << "\").click(function() {" << endl;
-        js << "$(\"#titlebox\").val(" << pit->title << ");" << endl;
+        js << "$(\"#titlebox\").val(\"" << templ->substitute(pit->title,"\"","\\\"") << "\");" << endl;
         js << "$(\"#id\").val(\"" << pit->oid << "\");" << endl;
-        js << "$(\"#textareabox\").val(\"" << pit->body << "\");" << endl;
+        js << "$(\"#textareabox\").val(\"" << templ->substitute(templ->substitute(templ->substitute(pit->body,"\"","\\\""),"\n","\\\n"),"\r","") << "\");" << 
+endl;
         js << "});";
     }
     js <<  "});";

@@ -151,7 +151,7 @@ void StorageEngine::dopost(std::string title,std::string body,string oid) {
     collection = "posts";
     update_namespace();
     try {
-        con.update(namespacestr,Query(getoid(oid)),BSON("title" << title << "body" << body));
+        con.update(namespacestr,Query(getoid(oid)),BSON("$set" << BSON("title" << title << "body" << body)));
     } catch(DBException &e) {
         cout << "Error: " << e.what() <<endl;
     }
